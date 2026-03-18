@@ -10,7 +10,7 @@ const activitySchema = new mongoose.Schema({
   timestamps: true // Adds createdAt and updatedAt
 });
 
-// Adding a unique constraint to timestamp+userId if we want simple idempotency
-// activitySchema.index({ userId: 1, timestamp: 1 }, { unique: true });
+// Unique constraint for idempotency: prevents reprocessing same event
+activitySchema.index({ userId: 1, timestamp: 1 }, { unique: true });
 
 module.exports = mongoose.model('Activity', activitySchema);

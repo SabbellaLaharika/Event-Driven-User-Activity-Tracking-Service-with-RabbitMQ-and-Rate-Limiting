@@ -11,7 +11,8 @@ const limiter = rateLimit({
     message: 'Rate limit exceeded, please try again later.'
   },
   handler: (req, res, next, options) => {
-    res.setHeader('Retry-After', Math.ceil(options.windowMs / 1000));
+    const timeRemaining = Math.max(0, Math.ceil((req.rateLimit.resetTime - Date.now()) / 1000));
+    res.setHeader('Retry-After', timeRemaining);
     res.status(options.statusCode).send(options.message);
   }
 });
