@@ -3,8 +3,11 @@ const Activity = require('../models/Activity');
 const processActivity = async (activityData) => {
   try {
     // Basic validation check before saving
-    if (!activityData.userId || !activityData.eventType) {
-      throw new Error('Invalid activity data: missing userId or eventType');
+    if (!activityData.userId) {
+      throw new Error('Invalid activity data: missing userId');
+    }
+    if (!activityData.eventType) {
+      throw new Error('Invalid activity data: missing eventType');
     }
 
     const activity = new Activity({

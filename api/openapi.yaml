@@ -1,0 +1,68 @@
+openapi: 3.0.0
+info:
+  title: User Activity Tracking API
+  description: API for ingesting user activity events, publishing them to RabbitMQ, and applying rate limits.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000/api/v1
+    description: Development server
+
+paths:
+  /activities:
+    post:
+      summary: Ingests a user activity event
+      description: Receives a user activity event and queues it in RabbitMQ for asynchronous processing.
+      operationId: ingestActivity
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActivityEvent'
+      responses:
+        '202':
+          description: Event successfully received and queued.
+          content:
+            application/json:
+              example:
+                message: "Event successfully received and queued."
+                eventId: "2023-10-27T10:00:00Z"
+        '400':
+          description: Invalid input payload. Missing required fields.
+        '429':
+          description: Rate limit exceeded.
+          headers:
+            Retry-After:
+              description: Seconds to wait before next request.
+              schema:
+                type: integer
+        '500':
+          description: Internal server error.
+
+components:
+  schemas:
+    ActivityEvent:
+      type: object
+      required:
+        - userId
+        - eventType
+        - timestamp
+      properties:
+        userId:
+          type: string
+          example: "a1b2c3d4-e5f6-7890-1234-567890abcdef"
+        eventType:
+          type: string
+          example: "user_login"
+        timestamp:
+          type: string
+          format: date-time
+          example: "2023-10-27T10:00:00Z"
+        payload:
+          type: object
+          description: Flexible JSON object containing additional event data.
+          example:
+            ipAddress: "192.168.1.1"
+            device: "desktop"
+            browser: "Chrome"
