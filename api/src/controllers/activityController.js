@@ -30,25 +30,39 @@ const activityController = {
     try {
       const { userId, eventType, timestamp, payload } = req.body;
 
-      // Basic validation
+      // Robust Validation
       if (!userId || !eventType || !timestamp) {
         return res.status(400).json({ error: 'Invalid input payload. userId, eventType, and timestamp are required.' });
       }
 
+      // Basic UUID structure check (8-4-4-4-12 hex chars)
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+      const isValidUserId = typeof userId === 'string' && (userId.length > 5 || uuidRegex.test(userId)); // Flexible but checks string
+      
+      const isValidDate = !isNaN(Date.parse(timestamp));
+
+      if (!isValidUserId || !isValidDate) {
+        return res.status(400).json({ error: 'Invalid userId format or timestamp format.' });
+      }
+
       const activityEvent = {
         userId,
-        eventType,
+        eventType: String(eventType).trim(),
         timestamp,
         payload: payload || {},
         receivedAt: new Date().toISOString()
       };
+
+      if (activityEvent.eventType === "") {
+        return res.status(400).json({ error: 'eventType cannot be empty.' });
+      }
 
       // Publish to RabbitMQ
       await publishActivity(activityEvent);
 
       return res.status(202).json({ 
         message: 'Event successfully received and queued.',
-        eventId: activityEvent.timestamp // Or generate a UUID as hinted in requirements
+        eventId: activityEvent.timestamp
       });
     } catch (error) {
       console.error('Error ingesting activity:', error);
