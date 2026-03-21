@@ -40,9 +40,6 @@ services:
       RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
       RATE_LIMIT_WINDOW_MS: 60000
       RATE_LIMIT_MAX_REQUESTS: 50
-    volumes:
-      - ./api:/app
-      - /app/node_modules
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -60,9 +57,6 @@ services:
       NODE_ENV: development
       RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
       DATABASE_URL: mongodb://user:password@database:27017/activity_db?authSource=admin
-    volumes:
-      - ./consumer:/app
-      - /app/node_modules
     depends_on:
       rabbitmq:
         condition: service_healthy

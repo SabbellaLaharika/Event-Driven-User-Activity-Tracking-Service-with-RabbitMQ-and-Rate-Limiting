@@ -2,7 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
-const swaggerJsdoc = require('swagger-jsdoc');
 const activityRoutes = require('./routes/activityRoutes');
 const limiter = require('./middlewares/rateLimiter');
 const { connectRabbitMQ, activityController } = require('./controllers/activityController');

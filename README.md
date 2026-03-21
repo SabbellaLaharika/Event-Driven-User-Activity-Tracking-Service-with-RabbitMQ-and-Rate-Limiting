@@ -57,6 +57,13 @@ Ingests a user activity event.
 - `202 Accepted`: Event queued.
 - `400 Bad Request`: Validation error.
 - `429 Too Many Requests`: Rate limit exceeded.
+- `500 Internal Server Error`: Generic error.
+
+## Management & Monitoring
+
+- **RabbitMQ Management UI**: [http://localhost:15672](http://localhost:15672) (User: `guest`, Pass: `guest`)
+- **API Health Check**: [http://localhost:3000/health](http://localhost:3000/health)
+- **API Documentation (Swagger)**: [http://localhost:3000/api-docs](http://localhost:3000/api-docs)
 
 ## Testing
 

@@ -23,8 +23,8 @@ graph TD
         proc --> mongo[(MongoDB Database)]
     end
 
-    api -.-> health1[/health]
-    con -.-> health2[Health Monitoring]
+    api -.-> health1["/health"]
+    con -.-> health2["Health Monitoring"]
 ```
 
 ## Key Components
