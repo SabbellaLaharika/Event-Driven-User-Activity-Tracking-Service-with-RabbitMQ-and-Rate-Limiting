@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Activity Processor Service should process valid activity data and save it to MongoDB 1`] = `
+{
+  "eventType": "login",
+  "payload": {
+    "browser": "Chrome",
+  },
+  "processedAt": Any<Date>,
+  "timestamp": Any<Date>,
+  "userId": "testUser",
+}
+`;

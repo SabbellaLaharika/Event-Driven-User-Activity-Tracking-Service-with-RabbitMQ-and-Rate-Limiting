@@ -12,10 +12,11 @@ describe('Rate Limiter Middleware', () => {
     app.get('/test', (req, res) => res.status(200).json({ success: true }));
   });
 
-  it('should allow requests within the limit', async () => {
+  it('should allow requests within the limit and match snapshot', async () => {
     const response = await request(app).get('/test');
     expect(response.status).toBe(200);
     expect(response.header).toHaveProperty('ratelimit-limit');
+    expect(response.body).toMatchSnapshot();
   });
 
   // Since it's 50 requests per minute, a full test of the limit itself 

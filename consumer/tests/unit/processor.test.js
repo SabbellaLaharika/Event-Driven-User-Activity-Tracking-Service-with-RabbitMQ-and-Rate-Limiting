@@ -22,6 +22,13 @@ describe('Activity Processor Service', () => {
     const result = await processActivity(validData);
     expect(result).toBe(true);
     expect(Activity).toHaveBeenCalled();
+    
+    // Capture the exact object being passed to the Mongoose constructor
+    const savedData = Activity.mock.calls[0][0];
+    expect(savedData).toMatchSnapshot({
+      timestamp: expect.any(Date),
+      processedAt: expect.any(Date)
+    });
   });
 
   it('should throw error if userId is missing', async () => {

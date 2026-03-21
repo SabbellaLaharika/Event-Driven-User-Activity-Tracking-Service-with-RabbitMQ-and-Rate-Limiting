@@ -35,12 +35,16 @@ describe('Activity Ingestion Integration', () => {
     expect(response.body.error).toContain('required');
   });
 
-  it('should accept valid ingestion requests', async () => {
-    // Note: This test assumes RabbitMQ is connected. 
-    // In actual server.js, we call connectRabbitMQ.
-    // We'd need to mock the controller's publisher or call connectRabbitMQ with the mock.
+  it('should accept valid ingestion requests and match snapshot', async () => {
+    const response = await request(app)
+      .post('/api/v1/activities')
+      .send({ 
+        userId: 'a1b2c3d4-e5f6-7890-1234-567890abcdef', 
+        eventType: 'test', 
+        timestamp: new Date().toISOString() 
+      });
     
-    // For simplicity, we manually inject a mock channel to the controller for testing if needed
-    // But since we are mockings amqplib, we just need the controller not to fail.
+    expect(response.status).toBe(202);
+    expect(response.body).toMatchSnapshot();
   });
 });
